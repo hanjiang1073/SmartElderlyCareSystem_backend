@@ -1,13 +1,14 @@
 package com.example.crud3.models;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Long roleid;
 
 	@Enumerated(EnumType.STRING)
 	@Column(length = 20)
@@ -21,12 +22,12 @@ public class Role {
 		this.name = name;
 	}
 
-	public Integer getId() {
-		return id;
+	public Long getId() {
+		return roleid;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setId(Long id) {
+		this.roleid = id;
 	}
 
 	public ERole getName() {
@@ -35,5 +36,16 @@ public class Role {
 
 	public void setName(ERole name) {
 		this.name = name;
+	}
+
+	@ManyToMany(mappedBy = "roles")
+	private Collection<User> users;
+
+	public Collection<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(Collection<User> users) {
+		this.users = users;
 	}
 }

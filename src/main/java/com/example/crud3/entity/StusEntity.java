@@ -10,7 +10,6 @@ import lombok.Data;
 
 @TableName("stus")
 @Data
-
 public class StusEntity {
     @TableId(value = "id", type = IdType.AUTO)
 
