@@ -14,6 +14,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import javax.annotation.Resource;
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -70,12 +71,12 @@ public class FlaskAPIClient {
                 return null;
             }
         };
-        v.
+
         try {
             // 构建请求体参数
             JSONObject requestBody = new JSONObject();
-            requestBody.put("A", "");
-            requestBody.put("B", "valueB");
+            //requestBody.put("A", vector);
+            //requestBody.put("B", );
 
             // 将请求体参数转换为字符串
             StringEntity entity = new StringEntity(requestBody.toString());
