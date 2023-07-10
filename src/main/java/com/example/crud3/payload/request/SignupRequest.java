@@ -9,7 +9,15 @@ public class SignupRequest {
     @Size(min = 3, max = 20)
     private String username;
 
-    
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    private String email;
     private Set<String> role;
     
     @NotBlank

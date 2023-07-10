@@ -27,7 +27,7 @@ public class SseEmitterController {
     MonggoDB monggoDB;
     InitInstance initInstance;
 
-    Thread t;
+    Thread thread;
 
     @GetMapping("/push/{message}")
     public ResponseEntity<String> push(@PathVariable(name = "message") String message) {
@@ -42,14 +42,14 @@ public class SseEmitterController {
     public void close(@PathVariable String userId){
         SseEmitterServer.removeUser(userId);
         initInstance.closeVideo();
-        t.isInterrupted();
+        thread.isInterrupted();
 
     }
         @GetMapping("/connect/{userId}/{Id}")
     public SseEmitter connect(@PathVariable String userId,@PathVariable int Id) {
         SseEmitter  s = SseEmitterServer.connect(userId);
         System.out.println("---------------"+Id+"----------------------");
-        t = new Thread(new Runnable() {
+         thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 initInstance = new InitInstance();
@@ -73,7 +73,7 @@ public class SseEmitterController {
                 }
             }
         });
-        t.start();
+        thread.start();
         return s;
     }
 }
