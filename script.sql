@@ -5,7 +5,8 @@ create table elder
     name        varchar(16) null,
     age         int         null,
     phone       varchar(16) null,
-    description varchar(16) null
+    description varchar(16) null,
+    vector      text        null
 );
 
 create table event
@@ -33,8 +34,8 @@ create table user
 
 create table userrole
 (
-    id     mediumtext null,
-    roleid mediumtext null
+    id     int null,
+    roleid int null
 );
 
 create table volunteer
@@ -44,7 +45,8 @@ create table volunteer
     name         varchar(16) null,
     age          int         null,
     phone        varchar(16) null,
-    description  varchar(16) null
+    description  varchar(16) null,
+    vector       text        null
 );
 
 
