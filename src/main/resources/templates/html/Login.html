@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<!--<html lang="en" class="no-js">-->
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login</title>
+        <!-- <meta name="description" content="">
+
+        <meta name="author" content=""> -->
+
+        <!-- CSS -->
+
+        <link rel="stylesheet" href="../../css/reset.css">
+
+        <link rel="stylesheet" href="../../css/supersized.css">
+
+        <link rel="stylesheet" href="../../css/style.css">
+        <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+
+        <!--[if lt IE 9]>
+
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+
+        <![endif]-->
+
+		<!--<script type="text/javascript">-->
+			<!--function check(){-->
+				<!--var name = document.getElementById("username");-->
+				<!--var password = document.getElementById("password");-->
+				<!--if (name.value == ""){-->
+					<!--alert("用户名不能为空！");-->
+					<!--name.focus();-->
+					<!--return false;-->
+				<!--}-->
+
+				<!--if (password.value == "") {-->
+					<!--alert("密码不能为空！");-->
+					<!--password.focus();-->
+					<!--return false;-->
+				<!--}-->
+			<!--}-->
+		<!--</script>-->
+
+
+    </head>
+
+    <body>
+        <div class="page-container">
+
+            <h1>登录</h1>
+
+
+            <form action="Login" method="post" id="form_38623">
+
+                <input type="text" name="username" id="username"class="username" placeholder="Username">
+                <div style="color:red">
+                    <label v-show="usern">账户不能为空</label>
+                </div>
+                <input type="password" name="password" id="password"class="password" placeholder="Password">
+                <div style="color:red">
+                    <label v-show="userp">密码不能为空</label>
+                </div>
+                <button type="button" v-on:click="check()">Sign in</button>
+                <div class="error"><span>+</span></div>
+            </form>
+            <a href="toRegister" style="color:#fff; text-decoration:none "><button type="submit">Sign up</button></a>
+            <div class="connect">
+
+                <p>智慧养老系统</p>
+                <p></p>
+                <!--
+                <p>
+
+                    <a class="facebook" href=""></a>
+
+                    <a class="twitter" href=""></a>
+
+                </p>
+                -->
+            </div>>
+        </div>
+        <!-- Javascript -->
+
+        <!-- <script src="assets/js/jquery-1.8.2.min.js"></script>
+
+        <script src="assets/js/supersized.3.2.7.min.js"></script>
+
+        <script src="assets/js/supersized-init.js"></script>
+
+        <script src="assets/js/scripts.js"></script> -->
+        <script th:src="@{/js/bootstrap.bundle.min.js?1413}" src="./js/bootstrap.bundle.min.js?1413"></script>
+        <script th:src="@{/js/blocs.min.js?3842}" src="./js/blocs.min.js?3842"></script>
+        <script th:src="@{/js/jqBootstrapValidation.js}" src="./js/jqBootstrapValidation.js"></script>
+        <script th:src="@{/js/formHandler.js?2118}" src="./js/formHandler.js?2118"></script>
+        <script th:src="@{/js/lazysizes.min.js}" src="./js/lazysizes.min.js" defer></script>
+
+        <script th:src="@{/js/jquery.min.js}"  type="text/javascript" charset="utf-8"></script>
+        <script th:src="@{/js/vue.js}"  type="text/javascript" charset="utf-8"></script>
+        <script th:src="@{/js/axios.min.js}"  type="text/javascript" charset="utf-8"></script>
+
+
+        <script>
+            var loginForm = new Vue({
+                el:"#form_38623",  //作用范围：id=form_38623的标签及其内部
+                data () {
+                    return {
+                        usern:false,
+                        userp:false,
+                    }
+                },
+                //定义方法
+                methods: {
+                    //1.登录方法
+                    check:function () {
+                        var username = $("#username").val();
+                        var password = $("#password").val();
+                        this.usern = false;
+                        this.userp = false;
+
+                        if (username === "")
+                        {
+                            this.usern = true;
+                        }
+                        if (password === "")
+                        {
+                            this.userp = true;
+                        }
+
+                        if(!this.usern){
+                            if(!this.userp){
+                                var form=new FormData();
+                                form.append("username",username);
+                                form.append("password",password);
+                                axios({
+                                    method: "post",
+                                    headers:{
+                                        'Content-Type' : 'application/x-www-form-urlencoded'
+                                    },
+                                    url: "api/auth/login",
+                                    data :form,
+                                }).then(function (value) {
+                                    if(value.data!=0) {
+                                            if(value.data !=100){
+                                                // localStorage.setItem("token",JSON.stringify(value.data.object))
+                                                window.location = "toAdmin";
+                                                console.log(value.data);
+                                                // this.$router.push('/toAdmin')	//登录验证成功路由实现跳转
+                                                //
+                                            }else{
+                                                window.location.href = "toHome_mem";
+                                            }
+                                        }else{
+                                            alert("用户名或密码错误");
+                                        }
+                                    })
+                                    .catch();
+                            }
+                        }
+
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
+
+
+
+
+

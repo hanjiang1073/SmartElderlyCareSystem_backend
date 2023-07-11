@@ -14,8 +14,8 @@ public class Global {
     public static final String TOKEN_CHECK= "NONE";
     public static final int REGISTER = 1; //注册
     public static final int FIND = 0; //找回
-    public static final String adminface="C:\\Users\\FUBOFENG\\IdeaProjects\\Monitor\\src\\main\\resources\\static\\face\\";
-    public static final String savepath="C:\\Users\\FUBOFENG\\IdeaProjects\\Monitor\\src\\main\\resources\\static\\intrusion\\";
+    public static final String adminface="D:\\2023\\summer\\adminface";
+    public static final String savepath="D:\\2023\\summer\\savepath";
 
 
     //此路径不能有中文

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+
+    <!-- import Vue before Element -->
+    <script src="https://cdn.staticfile.org/vue/2.7.0/vue.min.js"></script>
+
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <el-container style="height: 500px; border: 1px solid #eee">
+            <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+                <el-menu :default-openeds="['1', '3']">
+                    <el-submenu index="1">
+                        <template slot="title"><i class="el-icon-message"></i>入侵检测</template>
+                        <template slot="title"></template>
+                        <el-menu-item index="1-1"><a th:href="'/toWs/'+${session.nowUser.userid}">实时监控</a></el-menu-item>
+                        <el-menu-item index="1-2"><a th:href="@{/toReplay_admin}">入侵回放</a></el-menu-item>
+
+
+                        <el-menu-item index="1-3"><a th:href="@{/toRecord_admin}">查看记录</a></el-menu-item>
+                        <el-menu-item index="1-4"><a th:href="@{/toStatistics}">入侵统计</a></el-menu-item>
+
+
+                    </el-submenu>
+
+                    <el-submenu index="2">
+                        <template slot="title"><i class="el-icon-menu"></i>用户管理</template>
+
+
+                        <el-menu-item index="2-1"><a th:href="@{/toFacesign}">用户人脸注册</a></el-menu-item>
+                        <el-menu-item index="2-2"><a th:href="@{/toUser_info_jurisdiction}">用户权限及信息管理</a></el-menu-item>
+
+
+
+
+
+                    </el-submenu>
+                    <el-submenu index="3">
+                        <template slot="title"><i class="el-icon-setting"></i><a href="toWhitelist">人员白名单</a></template>
+
+                    </el-submenu>
+                </el-menu>
+            </el-aside>
+
+            <el-container>
+                <el-header style="text-align: right; font-size: 12px">
+                    <el-dropdown>
+                        <i class="el-icon-setting" style="margin-right: 15px"></i>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>查看</el-dropdown-item>
+                            <el-dropdown-item>新增</el-dropdown-item>
+                            <el-dropdown-item>删除</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                    <span>123</span>
+                </el-header>
+
+                <el-main>
+                    <el-calendar v-model="value">
+                    </el-calendar>
+                    </el-table>
+                </el-main>
+            </el-container>
+        </el-container>
+
+    </div>
+
+
+</body>
+
+<style>
+    .el-header {
+        background-color: #B3C0D1;
+        color: #333;
+        line-height: 60px;
+    }
+
+    .el-aside {
+        color: #333;
+    }
+</style>
+
+
+<script>
+    export default {
+    
+  }
+</script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+      return {
+        value: new Date()
+      }
+    }
+    })
+</script>
+
+</html>

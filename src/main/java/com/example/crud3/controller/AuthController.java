@@ -123,7 +123,7 @@ public class AuthController {
 
 
 		Set<String> strRoles = new HashSet<String>();
-		strRoles.add("ROLE_USER");
+		strRoles.add("user");
 		Set<Role> roles = new HashSet<>();
 
 		if (strRoles == null) {
