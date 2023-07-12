@@ -3,8 +3,10 @@ package com.example.crud3.py;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
 public class Python {
-    public ResponseEntity<Object> ban(String i,String url){
+    public Map pingPython(String i, String url){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
@@ -14,6 +16,8 @@ public class Python {
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
         ResponseEntity<Object> objectResponseEntity = restTemplate.exchange(url, HttpMethod.POST,requestEntity, Object.class);
         System.out.println("消息响应内容：" + objectResponseEntity.getBody());
-        return objectResponseEntity;
+        return (Map)objectResponseEntity.getBody();
     }
+
+
 }

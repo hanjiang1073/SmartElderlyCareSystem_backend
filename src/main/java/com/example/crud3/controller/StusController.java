@@ -17,6 +17,7 @@ public class StusController {
     StusService stusService;
     @GetMapping("")
     public List<StusEntity> getAll() {
+
         return stusService.list();
     }
     @PostMapping("")
