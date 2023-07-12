@@ -20,7 +20,7 @@ public class VideoProcessingThread extends  Thread {
     private String type2;
 
  /**
- 请求服务类型 1：interaction 2：emotion 3：fall 4: banerea
+ 请求服务类型 1：interaction 2：emotion 3：fall 4: banerea 5：faceType
  **/
     public VideoProcessingThread(String userId,int type) {
         this.userId = userId;
@@ -47,6 +47,7 @@ public class VideoProcessingThread extends  Thread {
                     case 2: type2 = "emotion";  break;
                     case 3: type2 = "fall"; break;
                     case 4: type2 = "banerea"; break;
+                    case 5: type2 = "faceType"; break;
 
 
                 }
