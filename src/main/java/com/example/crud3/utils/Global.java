@@ -15,7 +15,7 @@ public class Global {
     public static final int REGISTER = 1; //注册
     public static final int FIND = 0; //找回
     public static final String adminface="D:\\2023\\summer\\adminface";
-    public static final String savepath="D:\\2023\\summer\\savepath";
+    public static final String savepath="D:\\2023\\summer\\savepath\\";
 
 
     //此路径不能有中文

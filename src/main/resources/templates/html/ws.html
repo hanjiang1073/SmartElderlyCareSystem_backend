@@ -20,11 +20,11 @@
     // 用时间戳模拟登录用户
     const userId = new Date().getTime();
 
-    var id = [[${session.Id}]]
+    var type = [[${session.Id}]]
     if (!!window.EventSource) {
 
         // 建立连接
-        source = new EventSource('http://localhost:8080/sse/connect/' + userId+'/'+id);
+        source = new EventSource('http://localhost:8080/sse/connect/' + userId+'/'+type);
 
         /**
          * 连接一旦建立，就会触发open事件

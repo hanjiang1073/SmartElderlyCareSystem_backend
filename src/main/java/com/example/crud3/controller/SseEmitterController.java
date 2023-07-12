@@ -2,6 +2,7 @@ package com.example.crud3.controller;
 
 import com.example.crud3.py.Python;
 import com.example.crud3.service.MonggoDB;
+import com.example.crud3.service.impl.VideoProcessingThread;
 import com.example.crud3.utils.InitInstance;
 import com.example.crud3.utils.SseEmitterServer;
 import com.example.crud3.utils.savePicture;
@@ -44,47 +45,15 @@ public class SseEmitterController {
     public void close(@PathVariable String userId){
         SseEmitterServer.removeUser(userId);
         initInstance.closeVideo();
-        thread.isInterrupted();
+        thread.interrupt();
 
     }
-        @GetMapping("/connect/{userId}/{Id}")
-    public SseEmitter connect(@PathVariable String userId,@PathVariable int Id) {
-        SseEmitter  s = SseEmitterServer.connect(userId);
-        System.out.println("---------------"+Id+"----------------------");
-         thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                initInstance = new InitInstance();
-                Python py = new Python();//test
-                if(initInstance.openVideo()){
-
-                    while (true){
-                        Mat img = initInstance.getMatfromVideo();
-                        //String a = initInstance.matToBase64(Imgcodecs.imread("D:\\frame\\a.png"));//test
-                        String tem = initInstance.matToBase64(img);
-                        String path = savepath+savePicture.getTime();
-                        File file = new File(path);
-                        if(!file.exists()){
-                            Imgcodecs.imwrite(path,img);
-                            monggoDB.uploadFile(Id,path);
-                        }
-
-                      Map res = py.pingPython("D:\\frame\\tmp.jpg","http://127.0.0.1:5000/interaction");//test
-                       String ak47 = initInstance.matToBase64(Imgcodecs.imread((String) res.get("interactionresult")));
-                        //String ak47 = initInstance.matToBase64(Imgcodecs.imread("C:\\Users\\Lenovo\\PycharmProjects\\computerVision\\picture\\banresult.jpg"));//test
-                        SseEmitterServer.sendMessage(userId,ak47);
-
-                        try {
-                            Thread.sleep(50);
-
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }
-            }
-        });
+    /*视频监控模块i*/
+        @GetMapping("/connect/{userId}/{type}")
+    public SseEmitter connect(@PathVariable String userId,@PathVariable int type) {
+        SseEmitter s = SseEmitterServer.connect(userId);
+        System.out.println("---------------"+type+"----------------------");
+         thread = new VideoProcessingThread(userId,type);
         thread.start();
         return s;
     }
