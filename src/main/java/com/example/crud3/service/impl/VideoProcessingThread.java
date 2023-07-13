@@ -20,7 +20,7 @@ public class VideoProcessingThread extends  Thread {
     private String type2;
 
  /**
- 请求服务类型 1：interaction 2：emotion 3：fall 4: banerea 5：faceType
+ 请求服务类型 1：interaction 2：emotion 3：fall 4: banarea 5：faceType
  **/
     public VideoProcessingThread(String userId,int type) {
         this.userId = userId;
@@ -36,7 +36,8 @@ public class VideoProcessingThread extends  Thread {
                 Mat img = initInstance.getMatfromVideo();
 
                 String tem = initInstance.matToBase64(img);
-                String path = savepath +userId+"\\"+savePicture.getTime();
+                //String path = savepath +userId+"\\"+savePicture.getTime();
+                String path = "D:\\frame\\";
                 File file = new File(path);
                 if (!file.exists()) {
                     Imgcodecs.imwrite(path, img);
@@ -46,7 +47,7 @@ public class VideoProcessingThread extends  Thread {
                     case 1: type2 = "interaction" ;break;
                     case 2: type2 = "emotion";  break;
                     case 3: type2 = "fall"; break;
-                    case 4: type2 = "banerea"; break;
+                    case 4: type2 = "banarea"; break;
                     case 5: type2 = "faceType"; break;
 
 
