@@ -3,6 +3,7 @@ package com.example.crud3.controller;
 import com.example.crud3.py.Python;
 import com.example.crud3.service.MonggoDB;
 import com.example.crud3.service.impl.VideoProcessingThread;
+import com.example.crud3.service.impl.VideoProcessingThread2;
 import com.example.crud3.utils.InitInstance;
 import com.example.crud3.utils.SseEmitterServer;
 import com.example.crud3.utils.savePicture;
@@ -54,6 +55,14 @@ public class SseEmitterController {
         SseEmitter s = SseEmitterServer.connect(userId);
         System.out.println("---------------"+type+"----------------------");
          thread = new VideoProcessingThread(userId,type);
+        thread.start();
+        return s;
+    }
+    @GetMapping("/connect2/{userId}/{type}")
+    public SseEmitter connect2(@PathVariable String userId,@PathVariable int type) {
+        SseEmitter s = SseEmitterServer.connect(userId);
+        System.out.println("---------------"+type+"----------------------");
+        thread = new VideoProcessingThread2(userId,type);
         thread.start();
         return s;
     }

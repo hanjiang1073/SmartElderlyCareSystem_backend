@@ -18,7 +18,6 @@ public class VideoProcessingThread extends  Thread {
     private String userId;
     private int type;
     private String type2;
-
  /**
  请求服务类型 1：interaction 2：emotion 3：fall 4: banarea 5：faceType
  **/
@@ -29,12 +28,20 @@ public class VideoProcessingThread extends  Thread {
 
     @Override
     public void run() {
+        switch (type)
+        {
+            case 1: type2 = "interaction" ;break;
+            case 2: type2 = "emotion";  break;
+            case 3: type2 = "fall"; break;
+            case 4: type2 = "banarea"; break;
+            case 5: type2 = "faceType"; break;
+            case 6: type2 = "faceFeature"; break; //只返回一帧图像
+        }
         initInstance = new InitInstance();
         py = new Python();
         if (initInstance.openVideo()) {
             while (true) {
                 Mat img = initInstance.getMatfromVideo();
-
                 String tem = initInstance.matToBase64(img);
                 //String path = savepath +userId+"\\"+savePicture.getTime();
                 String path = "D:\\frame\\";
@@ -42,24 +49,14 @@ public class VideoProcessingThread extends  Thread {
                 if (!file.exists()) {
                     Imgcodecs.imwrite(path, img);
                 }
-                switch (type)
-                {
-                    case 1: type2 = "interaction" ;break;
-                    case 2: type2 = "emotion";  break;
-                    case 3: type2 = "fall"; break;
-                    case 4: type2 = "banarea"; break;
-                    case 5: type2 = "faceType"; break;
-
-
-                }
-                Map res = py.pingPython(path+"tmp.jpg", "http://127.0.0.1:5000/"+type2);
-                String ak47 = initInstance.matToBase64(Imgcodecs.imread((String) res.get("result")));
-                SseEmitterServer.sendMessage(userId, ak47);
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                    Map res = py.pingPython(path + "tmp.jpg", "http://127.0.0.1:5000/" + type2);
+                    String ak47 = initInstance.matToBase64(Imgcodecs.imread((String) res.get("result")));
+                    SseEmitterServer.sendMessage(userId, ak47);
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
             }
         }
     }
