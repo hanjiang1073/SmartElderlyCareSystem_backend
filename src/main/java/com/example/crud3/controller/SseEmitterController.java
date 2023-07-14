@@ -107,7 +107,7 @@ public class SseEmitterController {
                 elder.setDescription(connect3Request.getDesc());
                 elder.setVector(valorant);
                 elderService.save(elder);
-            }else{
+            }else if(!connect3Request.isType()){
                 VolunteerEntity volunteer = new VolunteerEntity();
                 volunteer.setName(connect3Request.getName());
                 volunteer.setAge(connect3Request.getAge());
@@ -115,6 +115,8 @@ public class SseEmitterController {
                 volunteer.setDescription(connect3Request.getDesc());
                 volunteer.setVector(valorant);
                 volunteerService.save(volunteer);
+            }else {
+                System.out.println("die");
             }
             return  s;
     }
