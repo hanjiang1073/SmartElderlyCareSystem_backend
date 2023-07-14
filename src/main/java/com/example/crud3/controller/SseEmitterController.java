@@ -9,6 +9,7 @@ import com.example.crud3.service.MonggoDB;
 import com.example.crud3.service.VolunteerService;
 import com.example.crud3.service.impl.VideoProcessingThread;
 import com.example.crud3.service.impl.VideoProcessingThread2;
+import com.example.crud3.service.impl.VideoProcessingThread32;
 import com.example.crud3.utils.InitInstance;
 import com.example.crud3.utils.SseEmitterServer;
 import com.example.crud3.utils.savePicture;
@@ -73,31 +74,41 @@ public class SseEmitterController {
         thread.start();
         return s;
     }
+    @GetMapping("/connect32")
+    public SseEmitter connect32(@PathVariable String userId,@PathVariable int type) {
+        SseEmitter s = SseEmitterServer.connect(userId);
+        System.out.println("---------------"+type+"----------------------");
+        thread = new VideoProcessingThread32(userId,type);
+        thread.start();
+        return s;
+    }
 
     @PostMapping("/connect3")
     public SseEmitter connect3(@RequestBody Connect3RequestEntity connect3Request){
         SseEmitter s = SseEmitterServer.connect("53");
         initInstance = new InitInstance();
         Python py = new Python();
-        String valorant = null;
-        initInstance.openVideo();
-        if (initInstance.openVideo()) {
+        String valorant;
+//        if (initInstance.openVideo()) {
+//
+//                Mat img = initInstance.getMatfromVideo();
+//                String tem = initInstance.matToBase64(img);
+//                SseEmitterServer.sendMessage("53",tem);
+//                //String path = savepath +userId+"\\"+savePicture.getTime();
+//                String path = "D:\\frame\\";
+//                File file = new File(path);
+//                if (!file.exists()) {
+//                    Imgcodecs.imwrite(path, img);
+//                }
+                Map res = py.pingPython("D:\\frame\\" + "tmp.jpg", "http://127.0.0.1:5000/faceFeature");
+                //xianshi
+                String v = initInstance.matToBase64(Imgcodecs.imread("D:\\frame\\" + "tmp.jpg"));
+                SseEmitterServer.sendMessage("53",v);
 
-                Mat img = initInstance.getMatfromVideo();
-                String tem = initInstance.matToBase64(img);
-                SseEmitterServer.sendMessage("53",tem);
-                //String path = savepath +userId+"\\"+savePicture.getTime();
-                String path = "D:\\frame\\";
-                File file = new File(path);
-                if (!file.exists()) {
-                    Imgcodecs.imwrite(path, img);
-                }
-                Map res = py.pingPython(path + "tmp.jpg", "http://127.0.0.1:5000/faceFeature");
-                //String valorant = initInstance.matToBase64(Imgcodecs.imread((String) res.get("result")));
                 valorant = (String) res.get("result");
 
 
-            }
+//           }
 
             if(connect3Request.isType()){
                 ElderEntity elder = new ElderEntity();
