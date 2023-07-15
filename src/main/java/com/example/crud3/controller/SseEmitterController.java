@@ -13,6 +13,8 @@ import com.example.crud3.service.impl.VideoProcessingThread32;
 import com.example.crud3.utils.InitInstance;
 import com.example.crud3.utils.SseEmitterServer;
 import com.example.crud3.utils.savePicture;
+import lombok.Getter;
+import lombok.Setter;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Base64;
 import java.util.Map;
 
 import static com.example.crud3.utils.Global.savepath;
@@ -36,7 +44,7 @@ public class SseEmitterController {
     InitInstance initInstance;
 
     Thread thread;
-
+    int image = 0;
     @Resource
     VolunteerService volunteerService;
     ElderService elderService;
@@ -84,11 +92,26 @@ public class SseEmitterController {
     }
 
     @PostMapping("/connect3")
-    public SseEmitter connect3(@RequestBody Connect3RequestEntity connect3Request){
-        SseEmitter s = SseEmitterServer.connect("53");
+    public boolean connect3(@RequestBody Connect3RequestEntity connect3Request){
         initInstance = new InitInstance();
         Python py = new Python();
         String valorant;
+        try {
+            BufferedImage carrierImage = decodeBase64Image(connect3Request.getCarrierImage());
+            // 保存embeddedImage到本地文件系统
+            File outputImage = new File("D:\\frame\\"+image+".jpg");
+            image++;
+            ImageIO.write(carrierImage, "jpg", outputImage);
+            // 获取保存的embeddedImage的URL
+            URL imageUrl = outputImage.toURI().toURL();
+            String embeddedImageUrl = imageUrl.toString();
+            Map res = py.pingPython( embeddedImageUrl, "http://127.0.0.1:5000/faceFeature");
+            //xianshi
+           // String v = initInstance.matToBase64(Imgcodecs.imread("D:\\frame\\" + "tmp.jpg"));
+            valorant = (String) res.get("result");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 //        if (initInstance.openVideo()) {
 //
 //                Mat img = initInstance.getMatfromVideo();
@@ -100,13 +123,6 @@ public class SseEmitterController {
 //                if (!file.exists()) {
 //                    Imgcodecs.imwrite(path, img);
 //                }
-                Map res = py.pingPython("D:\\frame\\" + "tmp.jpg", "http://127.0.0.1:5000/faceFeature");
-                //xianshi
-                String v = initInstance.matToBase64(Imgcodecs.imread("D:\\frame\\" + "tmp.jpg"));
-                SseEmitterServer.sendMessage("53",v);
-
-                valorant = (String) res.get("result");
-
 
 //           }
 
@@ -127,8 +143,22 @@ public class SseEmitterController {
                 volunteer.setVector(valorant);
                 volunteerService.save(volunteer);
             }else {
-                System.out.println("die");
+                System.out.println("failed");
+                return false;
             }
-            return  s;
+            return  true;
+    }
+    @Getter
+    @Setter
+    public static class EmbedMessageRequest {
+        private String carrierImage;
+        private String message;
+
+        // 省略构造函数和getter/setter方法
+    }
+    private BufferedImage decodeBase64Image(String base64Image) throws IOException {
+        byte[] imageBytes = Base64.getDecoder().decode(base64Image.split(",")[1]);
+        return ImageIO.read(new ByteArrayInputStream(imageBytes));
+
     }
 }
