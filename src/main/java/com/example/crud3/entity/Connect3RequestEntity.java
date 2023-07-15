@@ -8,10 +8,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Connect3RequestEntity {
-    private boolean type;
+    private boolean isOld;
     private String name;
     private Integer age;
     private String phone;
     private String desc;
-    private String carrierImage;
 }
