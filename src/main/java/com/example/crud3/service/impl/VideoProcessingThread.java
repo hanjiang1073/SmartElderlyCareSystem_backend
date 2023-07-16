@@ -8,6 +8,7 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Map;
 
 import static com.example.crud3.utils.Global.savepath;
@@ -49,7 +50,12 @@ public class VideoProcessingThread extends  Thread {
                     Imgcodecs.imwrite(path + "tmp.jpg", img);
                     Map res = py.pingPython(path + "tmp.jpg", "http://127.0.0.1:5000/" + type2);
                     String ak47 = initInstance.matToBase64(Imgcodecs.imread((String) res.get("result")));
-                    String message = (String) res.get("msg");
+                ArrayList message = (ArrayList) res.get("msg");
+
+                    if(!message.isEmpty())
+                    {
+                        System.out.println(message);
+                    }
                     SseEmitterServer.sendMessage(userId, ak47);
                     try {
                         Thread.sleep(50);
