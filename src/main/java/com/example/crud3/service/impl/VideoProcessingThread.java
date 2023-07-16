@@ -49,6 +49,7 @@ public class VideoProcessingThread extends  Thread {
                     Imgcodecs.imwrite(path + "tmp.jpg", img);
                     Map res = py.pingPython(path + "tmp.jpg", "http://127.0.0.1:5000/" + type2);
                     String ak47 = initInstance.matToBase64(Imgcodecs.imread((String) res.get("result")));
+                    String message = (String) res.get("msg");
                     SseEmitterServer.sendMessage(userId, ak47);
                     try {
                         Thread.sleep(50);

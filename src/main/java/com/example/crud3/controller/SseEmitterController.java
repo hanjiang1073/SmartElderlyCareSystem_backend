@@ -122,14 +122,6 @@ public class SseEmitterController {
         }
         return s;
     }
-    @GetMapping("/connect32")
-    public SseEmitter connect32(@PathVariable String userId,@PathVariable int type) {
-        SseEmitter s = SseEmitterServer.connect(userId);
-        System.out.println("---------------"+type+"----------------------");
-        thread = new VideoProcessingThread32(userId,type);
-        thread.start();
-        return s;
-    }
 
     @PostMapping("/connect3")
     public boolean connect3(@RequestBody Connect3RequestEntity connect3Request){
