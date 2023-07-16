@@ -42,10 +42,10 @@ public class InitInstance {
         //加载dll文件
 //        System.setProperty("java.library.path", "E:/Source/SmartElderlyCareSystem_backend/src/main/resources/lib.opencv");
 //        System.loadLibrary("opencv_java460");
-        System.load("E:/Source/SmartElderlyCareSystem_backend/src/main/resources/lib.opencv/opencv_java460.dll");
+  //      System.load("E:/Source/SmartElderlyCareSystem_backend/src/main/resources/lib.opencv/opencv_java460.dll");
 
-//        System.load(dllAbsPath);
-//        System.load(ffmpegxmlAbsPath);
+        System.load(dllAbsPath);
+        System.load(ffmpegxmlAbsPath);
        // faceDetector = new CascadeClassifier(facexmlAbsPath);
        // face=new facecheck();
         //face.initFaceCheck(1,adminface);

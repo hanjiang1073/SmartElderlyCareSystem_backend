@@ -10,7 +10,7 @@ import lombok.Setter;
 public class Connect3RequestEntity {
     private boolean isOld;
     private String name;
-    private Integer age;
+    private String age;
     private String phone;
     private String desc;
 }

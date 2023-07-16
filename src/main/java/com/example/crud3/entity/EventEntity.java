@@ -8,7 +8,6 @@ import lombok.Data;
 
 @TableName("event")
 @Data
-
 public class EventEntity {
     @TableId(value = "eventid", type = IdType.AUTO)
 

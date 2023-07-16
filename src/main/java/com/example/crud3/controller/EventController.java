@@ -10,9 +10,8 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/event")
-@CrossOrigin
-
 public class EventController {
     @Resource
     EventService eventService;

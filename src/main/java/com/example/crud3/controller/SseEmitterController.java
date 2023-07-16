@@ -16,6 +16,8 @@ import com.example.crud3.service.impl.VideoProcessingThread2;
 import com.example.crud3.service.impl.VideoProcessingThread32;
 import com.example.crud3.utils.InitInstance;
 import com.example.crud3.utils.SseEmitterServer;
+import org.opencv.core.Mat;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,27 +31,34 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/sse")
-@CrossOrigin
 public class SseEmitterController {
 
     @Autowired
     MonggoDB monggoDB;
     InitInstance initInstance;
-
+    private Python py;
     Thread thread;
     int image = 0;
-    @Resource
+    String type2 ;
+    @Autowired
     VolunteerService volunteerService;
+
+    @Autowired
     ElderService elderService;
+
     @Autowired
     ElderMapper elderMapper;
+
     @Autowired
     VolunteerMapper volunteerMapper;
+
     @GetMapping("/push/{message}")
     public ResponseEntity<String> push(@PathVariable(name = "message") String message) {
         for (int i = 0; i < 10; i++) {
@@ -78,9 +87,39 @@ public class SseEmitterController {
     @GetMapping("/connect2/{userId}/{type}")
     public SseEmitter connect2(@PathVariable String userId,@PathVariable int type) {
         SseEmitter s = SseEmitterServer.connect(userId);
+        switch (type) {
+            case 5:
+                type2 = "faceType";
+                break;
+            case 6:
+                type2 = "faceFeature";
+                break; //只返回一帧图像
+        }
         System.out.println("---------------"+type+"----------------------");
-        thread = new VideoProcessingThread2(userId,type);
-        thread.start();
+        List<ElderEntity> elder = elderMapper.selectList(new QueryWrapper<>());
+        List<VolunteerEntity> volunteer = volunteerMapper.selectList(new QueryWrapper<>());
+        initInstance = new InitInstance();
+        py = new Python();
+        if (initInstance.openVideo()) {
+            while (true) {
+                Mat img = initInstance.getMatfromVideo();
+                String tem = initInstance.matToBase64(img);
+                //String path = savepath +userId+"\\"+savePicture.getTime();
+                String path = "D:\\frame\\";
+                File file = new File(path);
+                if (!file.exists()) {
+                    Imgcodecs.imwrite(path, img);
+                }
+                Map res = py.pingPython(elder,volunteer,path + "tmp.jpg", "http://127.0.0.1:5000/" + type2);
+                String ak47 = initInstance.matToBase64(Imgcodecs.imread((String) res.get("result")));
+                SseEmitterServer.sendMessage(userId, ak47);
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         return s;
     }
     @GetMapping("/connect32")
@@ -98,7 +137,7 @@ public class SseEmitterController {
             if(connect3Request.isOld()){
                 ElderEntity elder = new ElderEntity();
                 elder.setName(connect3Request.getName());
-                elder.setAge(connect3Request.getAge());
+                elder.setAge(Integer.valueOf(connect3Request.getAge()));
                 elder.setPhone(connect3Request.getPhone());
                 elder.setDescription(connect3Request.getDesc());
                 elder.setVector("");
@@ -106,7 +145,7 @@ public class SseEmitterController {
             }else if(!connect3Request.isOld()){
                 VolunteerEntity volunteer = new VolunteerEntity();
                 volunteer.setName(connect3Request.getName());
-                volunteer.setAge(connect3Request.getAge());
+                volunteer.setAge(Integer.valueOf(connect3Request.getAge()));
                 volunteer.setPhone(connect3Request.getPhone());
                 volunteer.setDescription(connect3Request.getDesc());
                 volunteer.setVector("");
@@ -138,8 +177,6 @@ public class SseEmitterController {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
         if(connect4Request.isOld()){
             QueryWrapper<ElderEntity> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("elderid",Integer.parseInt(connect4Request.getId()));

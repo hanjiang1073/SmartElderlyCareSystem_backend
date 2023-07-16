@@ -10,8 +10,8 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/volunteer")
-
 public class VolunteerController {
     @Resource
     VolunteerService volunteerService;
