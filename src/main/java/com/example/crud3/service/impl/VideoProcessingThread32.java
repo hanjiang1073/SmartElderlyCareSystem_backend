@@ -2,6 +2,7 @@ package com.example.crud3.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.crud3.entity.ElderEntity;
+import com.example.crud3.entity.FacetypeEntity;
 import com.example.crud3.entity.VolunteerEntity;
 import com.example.crud3.mapper.ElderMapper;
 import com.example.crud3.mapper.VolunteerMapper;
@@ -10,6 +11,7 @@ import com.example.crud3.utils.InitInstance;
 import com.example.crud3.utils.SseEmitterServer;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.springframework.stereotype.Service;
 
 import java.awt.geom.QuadCurve2D;
 import java.io.File;
@@ -24,7 +26,6 @@ public class VideoProcessingThread32 extends  Thread {
     private String type2;
     private ElderMapper elderMapper;
     private VolunteerMapper volunteerMapper;
-
 
     public VideoProcessingThread32(String userId,int type) {
         this.userId = userId;
