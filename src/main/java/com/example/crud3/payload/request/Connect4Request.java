@@ -11,4 +11,10 @@ public class Connect4Request {
     private  String id;
     private  String img;
     private  boolean isOld;
+    Connect4Request(  String id,String img , boolean isOld)
+    {
+        this.id = id;
+        this.img = img;
+        this.isOld = isOld;
+    }
 }

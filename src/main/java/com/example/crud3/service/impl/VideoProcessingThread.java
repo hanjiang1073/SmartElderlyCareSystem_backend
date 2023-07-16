@@ -1,11 +1,13 @@
 package com.example.crud3.service.impl;
 
+import com.example.crud3.mapper.BanareaMapper;
 import com.example.crud3.py.Python;
 import com.example.crud3.utils.InitInstance;
 import com.example.crud3.utils.SseEmitterServer;
 import com.example.crud3.utils.savePicture;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,6 +21,8 @@ public class VideoProcessingThread extends  Thread {
     private String userId;
     private int type;
     private String type2;
+    @Autowired
+    BanareaMapper banareaMapper;
  /**
  请求服务类型 1：interaction 2：emotion 3：fall 4: banarea 5：faceType
  **/
@@ -50,11 +54,14 @@ public class VideoProcessingThread extends  Thread {
                     Imgcodecs.imwrite(path + "tmp.jpg", img);
                     Map res = py.pingPython(path + "tmp.jpg", "http://127.0.0.1:5000/" + type2);
                     String ak47 = initInstance.matToBase64(Imgcodecs.imread((String) res.get("result")));
-                ArrayList message = (ArrayList) res.get("msg");
-
+                    ArrayList message = (ArrayList) res.get("msg");
                     if(!message.isEmpty())
                     {
                         System.out.println(message);
+                        if(type == 1)
+                        {
+
+                        }
                     }
                     SseEmitterServer.sendMessage(userId, ak47);
                     try {

@@ -1,5 +1,7 @@
 package com.example.crud3.utils;
 
+import java.util.ArrayList;
+
 public class Global {
 
     public static final int SUCCESS = 1;
