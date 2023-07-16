@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/event")
+@CrossOrigin
 
 public class EventController {
     @Resource

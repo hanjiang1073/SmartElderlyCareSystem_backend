@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/elder")
 
 public class ElderController {
@@ -17,6 +18,7 @@ public class ElderController {
     ElderService elderService;
 
     @GetMapping("")
+
     public List<ElderEntity> getAll() {
         return elderService.list();
     }

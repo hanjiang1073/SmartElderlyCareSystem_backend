@@ -6,11 +6,15 @@ import com.example.crud3.entity.VolunteerEntity;
 import com.example.crud3.mapper.ElderMapper;
 import com.example.crud3.mapper.VolunteerMapper;
 import com.example.crud3.py.Python;
+import com.example.crud3.service.ElderService;
+import com.example.crud3.service.VolunteerService;
 import com.example.crud3.utils.InitInstance;
 import com.example.crud3.utils.SseEmitterServer;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.awt.geom.QuadCurve2D;
 import java.io.File;
 import java.util.List;
@@ -22,8 +26,12 @@ public class VideoProcessingThread2 extends  Thread {
     private String userId;
     private int type;
     private String type2;
+
     private ElderMapper elderMapper;
     private VolunteerMapper volunteerMapper;
+//    @Resource
+//    VolunteerService volunteerService;
+//    ElderService elderService;
 
     /**
      请求服务类型 1：interaction 2：emotion 3：fall 4: banarea 5：faceType
@@ -43,8 +51,9 @@ public class VideoProcessingThread2 extends  Thread {
                 type2 = "faceFeature";
                 break; //只返回一帧图像
         }
-       List<ElderEntity> elder = elderMapper.selectList(null);
-        List<VolunteerEntity> volunteer = volunteerMapper.selectList(null);
+        List<ElderEntity> elder = elderMapper.selectList(null);
+               //// elderMapper.selectList(null);
+        List<VolunteerEntity> volunteer =  volunteerMapper.selectList(null);
         initInstance = new InitInstance();
         py = new Python();
         if (initInstance.openVideo()) {
