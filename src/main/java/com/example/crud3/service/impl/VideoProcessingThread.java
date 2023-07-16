@@ -46,9 +46,9 @@ public class VideoProcessingThread extends  Thread {
                 //String path = savepath +userId+"\\"+savePicture.getTime();
                 String path = "D:\\frame\\";
                 File file = new File(path);
-                if (!file.exists()) {
-                    Imgcodecs.imwrite(path, img);
-                }
+
+                    Imgcodecs.imwrite(path + "tmp.jpg", img);
+
                     Map res = py.pingPython(path + "tmp.jpg", "http://127.0.0.1:5000/" + type2);
                     String ak47 = initInstance.matToBase64(Imgcodecs.imread((String) res.get("result")));
                     SseEmitterServer.sendMessage(userId, ak47);

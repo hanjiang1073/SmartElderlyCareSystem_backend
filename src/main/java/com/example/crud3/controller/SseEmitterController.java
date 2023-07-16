@@ -34,6 +34,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/sse")
+@CrossOrigin
 public class SseEmitterController {
 
     @Autowired

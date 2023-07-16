@@ -40,8 +40,12 @@ public class InitInstance {
     public  InitInstance() {
         logger.info("开始读取脸部识别实例");
         //加载dll文件
-        System.load(dllAbsPath);
-        System.load(ffmpegxmlAbsPath);
+//        System.setProperty("java.library.path", "E:/Source/SmartElderlyCareSystem_backend/src/main/resources/lib.opencv");
+//        System.loadLibrary("opencv_java460");
+        System.load("E:/Source/SmartElderlyCareSystem_backend/src/main/resources/lib.opencv/opencv_java460.dll");
+
+//        System.load(dllAbsPath);
+//        System.load(ffmpegxmlAbsPath);
        // faceDetector = new CascadeClassifier(facexmlAbsPath);
        // face=new facecheck();
         //face.initFaceCheck(1,adminface);
