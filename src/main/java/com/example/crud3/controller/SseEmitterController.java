@@ -11,9 +11,7 @@ import com.example.crud3.py.Python;
 import com.example.crud3.service.ElderService;
 import com.example.crud3.service.MonggoDB;
 import com.example.crud3.service.VolunteerService;
-import com.example.crud3.service.impl.VideoProcessingThread;
-import com.example.crud3.service.impl.VideoProcessingThread2;
-import com.example.crud3.service.impl.VideoProcessingThread32;
+import com.example.crud3.service.impl.*;
 import com.example.crud3.utils.InitInstance;
 import com.example.crud3.utils.SseEmitterServer;
 import org.opencv.core.Mat;
@@ -48,10 +46,10 @@ public class SseEmitterController {
     int image = 0;
     String type2 ;
     @Autowired
-    VolunteerService volunteerService;
+    VolunteerServiceImpl volunteerService;
 
     @Autowired
-    ElderService elderService;
+    ElderServiceImpl elderService;
 
     @Autowired
     ElderMapper elderMapper;
@@ -124,9 +122,9 @@ public class SseEmitterController {
     }
 
     @PostMapping("/connect3")
-    public boolean connect3(@RequestBody Connect3RequestEntity connect3Request){
-
-            if(connect3Request.isOld()){
+    public int connect3(@RequestBody Connect3RequestEntity connect3Request){
+            int id = 0;
+            if(connect3Request.isOld() ){
                 ElderEntity elder = new ElderEntity();
                 elder.setName(connect3Request.getName());
                 elder.setAge(Integer.valueOf(connect3Request.getAge()));
@@ -134,7 +132,11 @@ public class SseEmitterController {
                 elder.setDescription(connect3Request.getDesc());
                 elder.setVector("");
                 elderService.save(elder);
-            }else if(!connect3Request.isOld()){
+                QueryWrapper queryWrapper= new QueryWrapper<ElderEntity>();
+                queryWrapper.eq("name",connect3Request.getName());
+                ElderEntity elder1 = elderMapper.selectOne(queryWrapper);
+                id = elder1.getElderid();
+            }else if( connect3Request.isOld() ){
                 VolunteerEntity volunteer = new VolunteerEntity();
                 volunteer.setName(connect3Request.getName());
                 volunteer.setAge(Integer.valueOf(connect3Request.getAge()));
@@ -142,11 +144,15 @@ public class SseEmitterController {
                 volunteer.setDescription(connect3Request.getDesc());
                 volunteer.setVector("");
                 volunteerService.save(volunteer);
+                QueryWrapper queryWrapper= new QueryWrapper<VolunteerEntity>();
+                queryWrapper.eq("name",connect3Request.getName());
+               VolunteerEntity volunteer1 = volunteerMapper.selectOne(queryWrapper);
+                id = volunteer1.getVolunteerid();
             }else {
                 System.out.println("failed");
-                return false;
+                return id;
             }
-            return  true;
+            return  id;
     }
     @PostMapping("/connect4")
     public boolean connect4(@RequestBody Connect4Request connect4Request){
